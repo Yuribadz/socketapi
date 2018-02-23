@@ -7,34 +7,67 @@ find_package(Threads)
 
 
 
-# Application target
-add_executable(socketapi src/main.cpp)
-target_include_directories(socketapi
+# Target client
+add_executable(client src/client.cpp)
+target_include_directories(client
     PUBLIC inc
+)
+target_sources(client
+	PRIVATE 
+	  src/client.cpp
 )
 #target_compile_definitions(socketapi
 #    PRIVATE
 #)
-target_compile_options(socketapi
+target_compile_options(client
     PUBLIC
-	  -fno-elide-constructors
 )
-target_compile_features(socketapi
+target_compile_features(client
     PUBLIC
 	  cxx_auto_type
 	  cxx_range_for
 )
-target_link_libraries(socketapi 
+target_link_libraries(client 
     PUBLIC
 	  Threads::Threads
 )
-set_target_properties(socketapi
+set_target_properties(client
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
+# Target server
+add_executable(server src/server.cpp)
+target_include_directories(server
+    PUBLIC inc
+)
+#target_compile_definitions(server
+#    PRIVATE
+#)
+target_sources(server
+	PRIVATE 
+	  src/server.cpp
+)
+target_compile_options(server
+    PUBLIC
+)
+target_compile_features(server
+    PUBLIC
+	  cxx_auto_type
+	  cxx_range_for
+)
+target_link_libraries(server 
+    PUBLIC
+	  Threads::Threads
+)
+set_target_properties(server
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in tools/googletest-download/CMakeLists.txt)
@@ -68,7 +101,7 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-# Now simply link against gtest or gtest_main as needed. Eg
+# Target Unit test
 add_executable(test_run test/test.cpp)
 target_include_directories(test_run
     PUBLIC inc
