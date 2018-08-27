@@ -20,12 +20,17 @@
 #ifndef PGDATABASE_H
 #define PGDATABASE_H
 
+#include "pgdatabase.h"
+
 class PgDatabase
 {
 public:
     void connect();
     PgDatabase();
     ~PgDatabase();
+private:
+    void do_exit(PGconn *conn);
+    PGconn *_conn;
 };
 
 #endif // PGDATABASE_H
