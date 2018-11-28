@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 project (socketapi)
 
-
+include($ENV{HOME}/Projects/poco/cmake-build/Poco/PocoConfig.cmake)
 # Lookup for necessary libraries in system
 find_package(Threads)
 find_package(PostgreSQL REQUIRED)
