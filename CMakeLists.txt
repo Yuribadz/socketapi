@@ -2,11 +2,10 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 project (socketapi)
 
 # Set Poco Install directories
-set(Poco_DIR "/usr/local/lib/cmake/Poco/") 
-set(Poco_INCLUDE_DIRS "/usr/include/Poco/")
+set(Poco_DIR "$ENV{HOME}/Projects/poco/cmake-build/Poco") 
+set(Poco_INCLUDE_DIRS "$ENV{HOME}/Projects/poco/cmake-build/")
 # Lookup for necessary libraries in system
 find_package(Threads)
-find_package(PostgreSQL REQUIRED)
 find_package(Poco REQUIRED COMPONENTS Foundation Net XML Util)
 # Target server
 add_executable(server src/server.cpp)
@@ -14,7 +13,6 @@ target_include_directories(server
     PUBLIC 
       inc
     PRIVATE 
-      ${PostgreSQL_INCLUDE_DIRS}
 )
 #target_compile_definitions(server
 #    PRIVATE
@@ -22,7 +20,6 @@ target_include_directories(server
 target_sources(server
 	PRIVATE 
 	  src/server.cpp
-	  src/pgdatabase.cpp
 )
 target_compile_options(server
     PUBLIC
@@ -35,7 +32,6 @@ target_compile_features(server
 target_link_libraries(server 
     PUBLIC
 	  Threads::Threads
-	  ${PostgreSQL_LIBRARIES}
 	  Poco::Foundation
 	  Poco::Util
 	  Poco::Net
