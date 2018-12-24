@@ -1,12 +1,10 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 project (socketapi)
 
-# Set Poco Install directories
-set(Poco_DIR "$ENV{HOME}/Projects/poco/cmake-build/Poco") 
-set(Poco_INCLUDE_DIRS "$ENV{HOME}/Projects/poco/cmake-build/")
+
 # Lookup for necessary libraries in system
 find_package(Threads)
-find_package(Poco REQUIRED COMPONENTS Foundation Net XML Util)
+find_package(Poco CONFIG REQUIRED COMPONENTS Foundation Net XML Util)
 # Target server
 add_executable(server src/server.cpp)
 target_include_directories(server
@@ -19,7 +17,11 @@ target_include_directories(server
 #)
 target_sources(server
 	PRIVATE 
-	  src/server.cpp
+      src/server.cpp
+      src/AppLogger.cpp
+      src/AppServer.cpp
+      src/AppRequestHandler.cpp
+      src/AppRequestHandlerFactory.cpp
 )
 target_compile_options(server
     PUBLIC

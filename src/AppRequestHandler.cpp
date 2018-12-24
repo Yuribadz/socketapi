@@ -23,6 +23,25 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Timestamp.h"
 #include "Poco/DateTimeFormatter.h"
+#include <Poco/StreamCopier.h>
+#include <iostream>
+#include <sstream>
+
+// helper function to convert istream to string
+// it is used because stringstream is fairly slow
+std::string gulp(std::istream &in)
+{
+    std::string ret;
+    char buffer[4096];
+    while (in.read(buffer, sizeof(buffer)))
+    {
+        ret.append(buffer, sizeof(buffer));
+    }
+    const unsigned int extractedCharCount =
+            static_cast<const unsigned int>(in.gcount());
+    ret.append(buffer, extractedCharCount);
+    return ret;
+}
 
 AppRequestHandler::AppRequestHandler(const std::string &format) : _format(format)
 {
@@ -35,19 +54,12 @@ void AppRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request,
     Poco::Util::Application &app = Poco::Util::Application::instance();
     poco_information(applog::AppLogger::log,
                      "Request from " + request.clientAddress().toString());
-
-    Poco::Timestamp now;
-    std::string dt(Poco::DateTimeFormatter::format(now, _format));
-
+    // Get request body, poco gives istream for request body
+    std::istream &responseBodyIStream = request.stream();
+    std::string responseBody = gulp(responseBodyIStream);
     response.setChunkedTransferEncoding(true);
-    response.setContentType("text/html");
+    response.setContentType("text/plain");
 
     std::ostream &ostr = response.send();
-    ostr << "<html><head><title>HTTPTimeServer powered by "
-            "POCO C++ Libraries</title>";
-    ostr << "<meta http-equiv=\"refresh\" content=\"1\"></head>";
-    ostr << "<body><p style=\"text-align: center; "
-            "font-size: 48px;\">";
-    ostr << dt;
-    ostr << "</p></body></html>";
+    ostr << "We have received your request. You sent: \n" << responseBody;
 }
