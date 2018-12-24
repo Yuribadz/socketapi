@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 IF (WIN32)
-  set(CMAKE_TOOLCHAIN_FILE "C:/Users/eyurbad/vcpkg/scripts/buildsystems/vcpkg.cmake")
+  set(CMAKE_TOOLCHAIN_FILE "C:/Users/$ENV{USERNAME}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 ENDIF()
 project (socketapi)
 
