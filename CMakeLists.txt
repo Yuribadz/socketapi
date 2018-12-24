@@ -1,7 +1,14 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
+IF (WIN32)
+  set(CMAKE_TOOLCHAIN_FILE "C:/Users/eyurbad/vcpkg/scripts/buildsystems/vcpkg.cmake")
+ENDIF()
 project (socketapi)
 
-
+if (UNIX)
+  set(Poco_DIR "$ENV{HOME}/Projects/poco/cmake-build/Poco") 
+  set(Poco_INCLUDE_DIRS "$ENV{HOME}/Projects/poco/")
+  set(FPIC_FLAG "-fPIC")
+endif (UNIX)
 # Lookup for necessary libraries in system
 find_package(Threads)
 find_package(Poco CONFIG REQUIRED COMPONENTS Foundation Net XML Util)
