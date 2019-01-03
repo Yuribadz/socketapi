@@ -20,6 +20,7 @@
 
 #include "AppRequestHandler.hpp"
 #include "AppLogger.hpp"
+#include "DbMock.hpp"
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Timestamp.h"
 #include "Poco/DateTimeFormatter.h"
@@ -62,4 +63,12 @@ void AppRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request,
 
     std::ostream &ostr = response.send();
     ostr << "We have received your request. You sent: \n" << responseBody;
+    DbMock saywhat;
+    std::string testdata = "{\"key\" : \"username\",\"username\": [{\"First Name\" : \"Yuriy\" ,\"Last Name\" : \"Badziuk\",\"Phone\" : \"+phone\",\"Company\" : \"company\"}]}";
+    std::string testdata2 = "{\"key\" : \"username\"}";
+    std::string testdata3 = "{\"key\" : \"username\",\"username\": [{\"First Name\" : \"Andriy\" ,\"Last Name\" : \"Badziuk\",\"Phone\" : \"+phone\",\"Company\" : \"company\"}]}";
+    saywhat.addUserToDb(testdata);
+    saywhat.updatePersonInDb(testdata3);
+    saywhat.deleteUserFromDb(testdata2);
 }
+ 

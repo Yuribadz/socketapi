@@ -29,6 +29,7 @@ target_sources(server
       src/AppServer.cpp
       src/AppRequestHandler.cpp
       src/AppRequestHandlerFactory.cpp
+      src/DbMock.cpp
 )
 target_compile_options(server
     PUBLIC
